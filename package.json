@@ -1,0 +1,32 @@
+{
+  "name": "beontech-poc",
+  "version": "1.0.0",
+  "description": "BEON.Tech",
+  "scripts": {
+    "test:pw": "playwright test",
+    "test:cy": "cypress run",
+    "test:all": "npm run test:pw && npm run test:cy",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i-MartinX/BeonTech-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/i-MartinX/BeonTech-test/issues"
+  },
+  "homepage": "https://github.com/i-MartinX/BeonTech-test#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
+    "cypress": "^16.2.1",
+    "mochawesome": "^8.1.1",
+    "mochawesome-merge": "^5.1.1",
+    "mochawesome-report-generator": "^6.3.2",
+    "typescript": "^7.0.2"
+  }
+}
