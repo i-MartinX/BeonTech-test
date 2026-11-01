@@ -153,3 +153,5 @@ test-results/
 playwright-report/
 cypress/screenshots/
 cypress/videos/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

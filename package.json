@@ -5,8 +5,10 @@
   "scripts": {
     "test:pw": "playwright test",
     "test:cy": "cypress run",
-    "test:all": "npm run test:pw && npm run test:cy",
-    "typecheck": "tsc --noEmit"
+    "test:all": "tsx scripts/run-all.ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "node -e \"require('fs').rmSync('reports',{recursive:true,force:true})\"",
+    "merge": "tsx scripts/merge-results.ts"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
     "mochawesome": "^8.1.1",
     "mochawesome-merge": "^5.1.1",
     "mochawesome-report-generator": "^6.3.2",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }

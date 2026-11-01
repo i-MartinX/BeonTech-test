@@ -14,8 +14,10 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    // API tests are browser-independent, so they run once
+    { name: 'api', testMatch: /api\.spec\.ts/ },
+    { name: 'chromium', testMatch: /ui\.spec\.ts/, use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', testMatch: /ui\.spec\.ts/, use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', testMatch: /ui\.spec\.ts/, use: { ...devices['Desktop Safari'] } },
   ],
 });
