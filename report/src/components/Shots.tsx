@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { CypressWordmark, PlaywrightLogo } from './Logos';
 import { asset, scenarios } from '../lib/data';
 
 export function Shots() {
@@ -9,7 +10,7 @@ export function Shots() {
   }, []);
   const visual = scenarios.filter((s) => s.suite === 'VISUAL' && s.shots);
   return (
-    <section id="pixels" className="field-yellow section">
+    <section id="pixels" className="field-blue section">
       <div data-reveal className="grid gap-x-10 gap-y-6 md:grid-cols-12">
         <h2 className="h2 md:col-span-6">Pixel checks, headless</h2>
         <p className="m-0 max-w-[48ch] text-[length:var(--step-body)] md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8">
@@ -35,7 +36,7 @@ export function Shots() {
           aria-label="Playwright running the checkout scenario headless"
           className="block h-auto w-full"
         />
-        <figcaption className="soft mt-3 text-[length:var(--step-small)]">
+        <figcaption className="mt-3 text-[length:var(--step-small)]">
           The checkout scenario as Playwright runs it, recorded headless.
         </figcaption>
       </figure>
@@ -62,9 +63,16 @@ export function Shots() {
                         className="block h-auto w-full"
                       />
                     )}
-                    <figcaption className="soft mt-3 text-[length:var(--step-small)]">
-                      {tool === 'playwright' ? 'Playwright · Chromium' : 'Cypress · Electron'} ·{' '}
-                      {run?.status ?? 'not run'}
+                    <figcaption className="mt-3 flex items-center gap-3 text-[length:var(--step-small)]">
+                      {tool === 'playwright' ? (
+                        <PlaywrightLogo h={28} alt="" />
+                      ) : (
+                        <CypressWordmark h={20} alt="" />
+                      )}
+                      <span>
+                        {tool === 'playwright' ? 'Playwright · Chromium' : 'Cypress · Electron'} ·{' '}
+                        {run?.status ?? 'not run'}
+                      </span>
                     </figcaption>
                   </figure>
                 );

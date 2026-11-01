@@ -6,7 +6,7 @@ import { useLayoutEffect, useRef } from 'react';
  */
 export function FitText({
   lines,
-  maxVh = 0.36,
+  maxVh = 0.34,
   className = '',
   as: Tag = 'div',
 }: {
@@ -25,7 +25,8 @@ export function FitText({
       el.style.fontSize = '100px';
       let widest = 0;
       el.querySelectorAll<HTMLElement>('[data-line]').forEach((l) => {
-        widest = Math.max(widest, l.getBoundingClientRect().width);
+        // offsetWidth is the layout width: unlike getBoundingClientRect it ignores GSAP's scale
+        widest = Math.max(widest, l.offsetWidth);
       });
       if (!widest) return;
       const byWidth = (100 * el.clientWidth) / widest;
@@ -33,14 +34,22 @@ export function FitText({
     };
 
     fit();
+    // The size depends on the web font's metrics: fit again when it arrives.
+    document.fonts?.load('800 100px "Plus Jakarta Sans"').then(fit, fit);
     document.fonts?.ready.then(fit);
+    document.fonts?.addEventListener('loadingdone', fit);
+    // Also when the text itself changes width (font swap) or the container does.
     const ro = new ResizeObserver(fit);
     ro.observe(el);
-    return () => ro.disconnect();
+    el.querySelectorAll('[data-line]').forEach((l) => ro.observe(l));
+    return () => {
+      ro.disconnect();
+      document.fonts?.removeEventListener('loadingdone', fit);
+    };
   }, [lines, maxVh]);
 
   return (
-    <Tag ref={box} className={`display m-0 ${className}`}>
+    <Tag ref={box} className={`display m-0 ${className}`} style={{ lineHeight: 1.06 }}>
       {lines.map((l, i) => (
         <span key={l}>
           {i > 0 && ' '}

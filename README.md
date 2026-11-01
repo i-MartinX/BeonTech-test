@@ -82,3 +82,18 @@ One-time setup: **Settings > Pages > Build and deployment > Source: GitHub Actio
 Linux visual baselines are created by CI the first time it runs (and whenever you trigger the workflow manually
 with *Regenerate the Linux screenshot baselines* ticked), then committed back with `[skip ci]`. That needs
 **Settings > Actions > General > Workflow permissions > Read and write**.
+
+## Brand and credits
+
+The report uses the BEON.tech brand, taken from beon.tech: Plus Jakarta Sans; navy `#20222d`, blue `#3a69ff`,
+violet `#7432ff`, light grey `#f4f5f7`; green `#39b96a` for passes and red `#ff3a3a` for failures.
+Logos live in `report/public/brand/` and are used unmodified, only to identify each product:
+
+| File | Source |
+| --- | --- |
+| `beon-mark.svg`, `beon-wordmark.webp` | beon.tech |
+| `playwright-logo.svg` | playwright.dev |
+| `cypress-wordmark-white.svg` | docs.cypress.io |
+| Cypress "cy" mark (inline SVG) | Simple Icons (CC0) |
+
+BEON.tech, Playwright and Cypress names and logos belong to their owners.

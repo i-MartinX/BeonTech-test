@@ -17,7 +17,7 @@ function Fig({ value, unit }: { value: number; unit?: string }) {
 export function Stats() {
   const browsers = pw.browsers.length;
   return (
-    <section id="result" className="field-black section">
+    <section id="result" className="field-blue section">
       <h2 className="sr-only">The result</h2>
       <p
         data-reveal

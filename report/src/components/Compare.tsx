@@ -1,27 +1,40 @@
+import { CypressMark, PlaywrightLogo } from './Logos';
 import { likeForLike, seconds } from '../lib/data';
 
 /** Two giant figures compared, cut by the section's bottom edge. */
-function Specimen({ value, caption }: { value: string; caption: string }) {
+function Specimen({
+  value,
+  caption,
+  logo,
+}: {
+  value: string;
+  caption: string;
+  logo: React.ReactNode;
+}) {
   return (
-    <div data-spec>
-      <div className="overflow-hidden" style={{ height: 'min(19vw, 330px)' }}>
+    <div data-spec style={{ containerType: 'inline-size' }}>
+      {/* Sized from the column, so the figure always fits; the bottom edge cuts it */}
+      <div className="overflow-hidden" style={{ height: 'min(23cqw, 320px)' }}>
         <div
           className="display"
-          style={{ fontSize: 'min(26vw, 440px)', lineHeight: 0.8 }}
+          style={{ fontSize: 'min(32cqw, 440px)', lineHeight: 0.8 }}
           aria-label={`${value} median per scenario`}
         >
           {value.replace(/s$/, '')}
-          <span style={{ textTransform: 'none' }}>s</span>
+          <span>s</span>
         </div>
       </div>
-      <p className="m-0 mt-3 text-[length:var(--step-body)] font-semibold">{caption}</p>
+      <p className="m-0 mt-4 flex items-center gap-3 text-[length:var(--step-body)] font-semibold">
+        {logo}
+        {caption}
+      </p>
     </div>
   );
 }
 
 export function Compare() {
   return (
-    <section id="compare" className="field-yellow section" style={{ paddingBottom: 0 }}>
+    <section id="compare" className="field-light section" style={{ paddingBottom: 0 }}>
       <div
         data-reveal
         className="grid gap-x-10 gap-y-6 md:grid-cols-12"
@@ -39,12 +52,14 @@ export function Compare() {
           <Specimen
             value={seconds(likeForLike.pwMedianMs)}
             caption="Playwright · Chromium · median per scenario"
+            logo={<PlaywrightLogo h={44} alt="" />}
           />
         </div>
         <div className="md:col-span-6">
           <Specimen
             value={seconds(likeForLike.cyMedianMs)}
             caption="Cypress · Electron · median per scenario"
+            logo={<CypressMark h={40} />}
           />
         </div>
       </div>
