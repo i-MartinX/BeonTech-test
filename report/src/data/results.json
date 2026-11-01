@@ -1,0 +1,515 @@
+{
+  "generatedAt": "2026-11-01T02:13:23.596Z",
+  "ci": false,
+  "targets": {
+    "ui": "https://www.saucedemo.com",
+    "api": "https://restful-booker.herokuapp.com"
+  },
+  "tools": {
+    "playwright": {
+      "version": "1.64.1",
+      "summary": {
+        "total": 37,
+        "passed": 37,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "testTimeMs": 77929,
+        "wallTimeMs": 23734,
+        "browsers": [
+          "chromium",
+          "firefox",
+          "webkit"
+        ]
+      }
+    },
+    "cypress": {
+      "version": "16.2.1",
+      "summary": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "testTimeMs": 10407,
+        "wallTimeMs": 16564,
+        "browsers": [
+          "electron"
+        ]
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "API-01",
+      "suite": "API",
+      "title": "health check returns 201 Created",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 532,
+          "retries": 0
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 494,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "API-02",
+      "suite": "API",
+      "title": "create booking echoes the payload",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 551,
+          "retries": 0
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 134,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "API-03",
+      "suite": "API",
+      "title": "get booking by id returns the stored data",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 642,
+          "retries": 0
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 181,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "API-04",
+      "suite": "API",
+      "title": "get booking matches the expected schema",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 638,
+          "retries": 0
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 182,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "API-05",
+      "suite": "API",
+      "title": "update booking with a valid token",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 708,
+          "retries": 0
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 264,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "API-06",
+      "suite": "API",
+      "title": "delete booking then it is gone",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 673,
+          "retries": 0
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 331,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "API-07",
+      "suite": "API",
+      "title": "auth with bad credentials returns no token",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 541,
+          "retries": 0
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 92,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "UI-01",
+      "suite": "UI",
+      "title": "standard user logs in and sees 6 products",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 6059,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 741,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 3188,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 2130,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 1202,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "UI-02",
+      "suite": "UI",
+      "title": "locked-out user sees an error",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 6352,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 602,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 3991,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 1759,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 552,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "UI-03",
+      "suite": "UI",
+      "title": "invalid credentials show an error",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 6121,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 1016,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 3557,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 1548,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 466,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "UI-04",
+      "suite": "UI",
+      "title": "sort products by price low to high",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 8126,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 1123,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 4965,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 2038,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 607,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "UI-05",
+      "suite": "UI",
+      "title": "adding to cart updates the badge",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 7709,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 925,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 4620,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 2164,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 517,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "UI-06",
+      "suite": "UI",
+      "title": "complete checkout flow",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 10582,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 1383,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 5803,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 3396,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 1263,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "UI-07",
+      "suite": "UI",
+      "title": "inventory still renders when product images fail",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 7667,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 816,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 5129,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 1722,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 489,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "id": "VIS-01",
+      "suite": "VISUAL",
+      "title": "inventory page matches the baseline",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 9630,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 2247,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 5476,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 1907,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 1276,
+          "retries": 0
+        }
+      },
+      "shots": {
+        "playwright": "shots/pw-inventory.png",
+        "cypress": "shots/cy-inventory.png"
+      }
+    },
+    {
+      "id": "VIS-02",
+      "suite": "VISUAL",
+      "title": "login error state matches the baseline",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 3636,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 662,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 1519,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 1455,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 787,
+          "retries": 0
+        }
+      },
+      "shots": {
+        "playwright": "shots/pw-login-error.png",
+        "cypress": "shots/cy-login-error.png"
+      }
+    },
+    {
+      "id": "VIS-03",
+      "suite": "VISUAL",
+      "title": "order confirmation matches the baseline",
+      "results": {
+        "playwright": {
+          "status": "passed",
+          "durationMs": 7762,
+          "retries": 0,
+          "browsers": {
+            "chromium": {
+              "status": "passed",
+              "durationMs": 1552,
+              "retries": 0
+            },
+            "firefox": {
+              "status": "passed",
+              "durationMs": 2474,
+              "retries": 0
+            },
+            "webkit": {
+              "status": "passed",
+              "durationMs": 3736,
+              "retries": 0
+            }
+          }
+        },
+        "cypress": {
+          "status": "passed",
+          "durationMs": 1570,
+          "retries": 0
+        }
+      },
+      "shots": {
+        "playwright": "shots/pw-order-complete.png",
+        "cypress": "shots/cy-order-complete.png"
+      }
+    }
+  ]
+}

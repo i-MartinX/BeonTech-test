@@ -147,3 +147,16 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+reports/
+test-results/
+playwright-report/
+cypress/screenshots/
+cypress/videos/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+
+site/
+report/dist/
+report/node_modules/
+.taste-skill/inspect/

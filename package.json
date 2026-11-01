@@ -1,0 +1,47 @@
+{
+  "name": "beontech-poc",
+  "version": "1.0.0",
+  "description": "BEON.Tech",
+  "scripts": {
+    "test:pw": "playwright test",
+    "test:cy": "cypress run",
+    "test:all": "tsx scripts/run-all.ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "node -e \"require('fs').rmSync('reports',{recursive:true,force:true})\"",
+    "merge": "tsx scripts/merge-results.ts",
+    "test:pw:update": "playwright test --update-snapshots",
+    "test:cy:update": "cross-env UPDATE_SNAPSHOTS=1 cypress run",
+    "report:data": "tsx scripts/merge-results.ts --out report/src/data/results.json --shots report/public/shots",
+    "report:cypress-html": "mochawesome-merge \"reports/cypress-json/*.json\" > reports/cypress-merged.json && marge reports/cypress-merged.json -f index -o reports/cypress-html --inline",
+    "report:dev": "npm --prefix report run dev",
+    "report:build": "npm --prefix report run build",
+    "report:site": "tsx scripts/assemble-site.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i-MartinX/BeonTech-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/i-MartinX/BeonTech-test/issues"
+  },
+  "homepage": "https://github.com/i-MartinX/BeonTech-test#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5",
+    "cross-env": "^10.1.0",
+    "cypress": "^16.2.1",
+    "mochawesome": "^8.1.1",
+    "mochawesome-merge": "^5.1.1",
+    "mochawesome-report-generator": "^6.3.2",
+    "pixelmatch": "^5.3.0",
+    "pngjs": "^7.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
