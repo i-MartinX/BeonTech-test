@@ -2,10 +2,11 @@
  * Merges Playwright (JSON reporter) and Cypress (mochawesome JSON) results into one
  * normalized file, matching scenarios across tools by their [ID] prefix, e.g. "[API-01]".
  *
- * Usage: tsx scripts/merge-results.ts [outFile]
+ * Usage: tsx scripts/merge-results.ts [--out <results.json>] [--shots <dir>]
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { VISUAL } from '../shared/data';
 
 type Status = 'passed' | 'failed' | 'skipped' | 'flaky';
 
@@ -21,10 +22,14 @@ interface ToolResult extends Run {
   browsers?: Record<string, Run>;
 }
 
+type Suite = 'API' | 'UI' | 'VISUAL';
+
 interface Scenario {
   id: string;
-  suite: 'API' | 'UI';
+  suite: Suite;
   title: string;
+  /** Baseline screenshots (visual scenarios), as paths relative to the report's public dir */
+  shots?: { playwright?: string; cypress?: string };
   results: { playwright?: ToolResult; cypress?: ToolResult };
 }
 
@@ -43,9 +48,16 @@ interface Summary {
 
 const root = path.resolve(__dirname, '..');
 const reportsDir = path.join(root, 'reports');
-const outFile = process.argv[2] ?? path.join(reportsDir, 'results.json');
+const arg = (name: string, fallback: string) => {
+  const i = process.argv.indexOf(`--${name}`);
+  return i > -1 && process.argv[i + 1] ? path.resolve(process.argv[i + 1]) : fallback;
+};
+const outFile = arg('out', path.join(reportsDir, 'results.json'));
+const shotsDir = arg('shots', path.join(reportsDir, 'shots'));
 
-const ID_RE = /^\[((API|UI)-\d+)\]\s*(.*)$/;
+const SUITES: Record<string, Suite> = { API: 'API', UI: 'UI', VIS: 'VISUAL' };
+
+const ID_RE = /^\[((API|UI|VIS)-\d+)\]\s*(.*)$/;
 
 const readJson = (file: string) => JSON.parse(fs.readFileSync(file, 'utf8'));
 
@@ -83,15 +95,15 @@ function loadPlaywright(scenarios: Map<string, Scenario>) {
   // Playwright emits one spec entry per project (browser), so collect them per scenario ID first.
   const collected = new Map<
     string,
-    { suite: 'API' | 'UI'; title: string; perProject: Record<string, Run> }
+    { suite: Suite; title: string; perProject: Record<string, Run> }
   >();
 
   for (const top of data.suites as PwSuite[]) {
     for (const spec of pwSpecs(top)) {
       const m = ID_RE.exec(spec.title);
       if (!m) continue;
-      const [, id, suite, title] = m;
-      const entry = collected.get(id) ?? { suite: suite as 'API' | 'UI', title, perProject: {} };
+      const [, id, prefix, title] = m;
+      const entry = collected.get(id) ?? { suite: SUITES[prefix], title, perProject: {} };
 
       for (const t of spec.tests) {
         const last = t.results[t.results.length - 1];
@@ -122,7 +134,7 @@ function loadPlaywright(scenarios: Map<string, Scenario>) {
       durationMs: runs.reduce((s, r) => s + r.durationMs, 0),
       retries: runs.reduce((s, r) => s + r.retries, 0),
       error: runs.find((r) => r.error)?.error,
-      browsers: suite === 'UI' ? perProject : undefined,
+      browsers: suite !== 'API' ? perProject : undefined,
     };
     const entry = scenarios.get(id) ?? { id, suite, title, results: {} };
     entry.results.playwright = result;
@@ -166,10 +178,11 @@ function loadCypress(scenarios: Map<string, Scenario>) {
       for (const test of mochaTests(root)) {
         const m = ID_RE.exec(test.title);
         if (!m) continue;
-        const [, id, suite, title] = m;
+        const [, id, prefix, title] = m;
+        const suite = SUITES[prefix];
         const status: Status =
           test.state === 'passed' ? 'passed' : test.state === 'failed' ? 'failed' : 'skipped';
-        const entry = scenarios.get(id) ?? { id, suite: suite as 'API' | 'UI', title, results: {} };
+        const entry = scenarios.get(id) ?? { id, suite, title, results: {} };
         entry.results.cypress = {
           status,
           durationMs: test.duration ?? 0,
@@ -222,6 +235,32 @@ const cyMeta = loadCypress(scenarioMap);
 const scenarios = [...scenarioMap.values()].sort((a, b) =>
   a.id.localeCompare(b.id, undefined, { numeric: true }),
 );
+
+// Copy the baseline screenshots next to the report so it can show them.
+// Baselines are per-OS; prefer this machine's, fall back to any that exists.
+function findBaseline(rel: (platform: string) => string): string | undefined {
+  const platforms = [process.platform, 'linux', 'win32', 'darwin'];
+  return platforms.map(rel).find((p) => fs.existsSync(p));
+}
+
+for (const s of scenarios.filter((x) => x.suite === 'VISUAL')) {
+  const name = VISUAL.snapshots[s.id];
+  if (!name) continue;
+  const sources = {
+    playwright: findBaseline((pl) =>
+      path.join(root, 'playwright', '__screenshots__', pl, 'chromium', 'visual.spec.ts', `${name}.png`),
+    ),
+    cypress: findBaseline((pl) => path.join(root, 'cypress', 'snapshots', pl, `${name}.png`)),
+  };
+  s.shots = {};
+  fs.mkdirSync(shotsDir, { recursive: true });
+  for (const [tool, src] of Object.entries(sources)) {
+    if (!src) continue;
+    const file = `${tool === 'playwright' ? 'pw' : 'cy'}-${name}.png`;
+    fs.copyFileSync(src, path.join(shotsDir, file));
+    s.shots[tool as 'playwright' | 'cypress'] = `shots/${file}`;
+  }
+}
 
 const out = {
   generatedAt: new Date().toISOString(),

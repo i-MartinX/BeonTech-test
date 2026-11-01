@@ -19,11 +19,12 @@ Reports are written to `reports/` (git-ignored).
 
 ## Scenarios
 
-Both tools run the same 14 scenarios (`shared/data.ts` holds the test data). Titles carry an ID
+Both tools run the same 17 scenarios (`shared/data.ts` holds the test data). Titles carry an ID
 (`[API-01]`, `[UI-01]`...) so results can be matched across tools.
 
 - **API (7)** - Restful-Booker: health, create, get, schema, update, delete, bad auth
 - **UI (7)** - SauceDemo: login (ok / locked / invalid), sort, cart badge, checkout, network failure
+- **Visual (3)** - screenshot comparison in headless mode: inventory page, login error, order confirmation
 
 Playwright runs the UI scenarios on Chromium, Firefox and WebKit; Cypress runs on Electron.
 
@@ -34,4 +35,17 @@ Unset it before running Cypress locally:
 
 ```powershell
 Remove-Item Env:ELECTRON_RUN_AS_NODE
+```
+
+## Visual checks
+
+- Playwright uses `toHaveScreenshot` (per browser). Cypress has no built-in, so `cypress.config.ts` has a
+  `compareSnapshot` task using `pixelmatch` (1% pixel tolerance, diff image in `reports/cypress-diffs/`).
+- Both run headless at a fixed 1280x720 viewport.
+- Baselines are stored per OS (`playwright/__screenshots__/<os>/...`, `cypress/snapshots/<os>/`) because font
+  rendering differs between Windows and Linux. Create or refresh them with:
+
+```powershell
+npm run test:pw:update
+npm run test:cy:update
 ```
