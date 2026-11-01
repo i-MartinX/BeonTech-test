@@ -291,3 +291,27 @@ const line = (name: string, t?: { summary: Summary }) =>
 console.log(line('Playwright', out.tools.playwright));
 console.log(line('Cypress', out.tools.cypress));
 console.log(`Merged ${scenarios.length} scenarios -> ${path.relative(root, outFile)}`);
+
+// In GitHub Actions, show the comparison on the run's summary page too.
+if (process.env.GITHUB_STEP_SUMMARY) {
+  const row = (name: string, t?: { summary: Summary }) =>
+    t
+      ? `| ${name} | ${t.summary.passed}/${t.summary.total} | ${t.summary.failed} | ${t.summary.flaky} | ` +
+        `${(t.summary.wallTimeMs / 1000).toFixed(1)}s | ${t.summary.browsers.join(', ')} |`
+      : `| ${name} | no results | | | | |`;
+  const failed = scenarios.filter((s) =>
+    [s.results.playwright?.status, s.results.cypress?.status].includes('failed'),
+  );
+  const md = [
+    '## Playwright vs Cypress',
+    '',
+    '| Tool | Passed | Failed | Flaky | Wall time | Browsers |',
+    '| --- | --- | --- | --- | --- | --- |',
+    row('Playwright', out.tools.playwright),
+    row('Cypress', out.tools.cypress),
+    '',
+    `${scenarios.length} scenarios, ${failed.length ? `failing: ${failed.map((s) => s.id).join(', ')}` : 'none failing'}.`,
+    '',
+  ].join('\n');
+  fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+}

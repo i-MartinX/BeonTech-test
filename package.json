@@ -10,7 +10,12 @@
     "clean": "node -e \"require('fs').rmSync('reports',{recursive:true,force:true})\"",
     "merge": "tsx scripts/merge-results.ts",
     "test:pw:update": "playwright test --update-snapshots",
-    "test:cy:update": "cross-env UPDATE_SNAPSHOTS=1 cypress run"
+    "test:cy:update": "cross-env UPDATE_SNAPSHOTS=1 cypress run",
+    "report:data": "tsx scripts/merge-results.ts --out report/src/data/results.json --shots report/public/shots",
+    "report:cypress-html": "mochawesome-merge \"reports/cypress-json/*.json\" > reports/cypress-merged.json && marge reports/cypress-merged.json -f index -o reports/cypress-html --inline",
+    "report:dev": "npm --prefix report run dev",
+    "report:build": "npm --prefix report run build",
+    "report:site": "tsx scripts/assemble-site.ts"
   },
   "repository": {
     "type": "git",

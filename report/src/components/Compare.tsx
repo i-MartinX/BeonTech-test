@@ -1,0 +1,53 @@
+import { likeForLike, seconds } from '../lib/data';
+
+/** Two giant figures compared, cut by the section's bottom edge. */
+function Specimen({ value, caption }: { value: string; caption: string }) {
+  return (
+    <div data-spec>
+      <div className="overflow-hidden" style={{ height: 'min(19vw, 330px)' }}>
+        <div
+          className="display"
+          style={{ fontSize: 'min(26vw, 440px)', lineHeight: 0.8 }}
+          aria-label={`${value} median per scenario`}
+        >
+          {value.replace(/s$/, '')}
+          <span style={{ textTransform: 'none' }}>s</span>
+        </div>
+      </div>
+      <p className="m-0 mt-3 text-[length:var(--step-body)] font-semibold">{caption}</p>
+    </div>
+  );
+}
+
+export function Compare() {
+  return (
+    <section id="compare" className="field-yellow section" style={{ paddingBottom: 0 }}>
+      <div
+        data-reveal
+        className="grid gap-x-10 gap-y-6 md:grid-cols-12"
+        style={{ marginBottom: 'clamp(48px, 8vh, 120px)' }}
+      >
+        <h2 className="h2 md:col-span-6">Median time per scenario</h2>
+        <p className="m-0 max-w-[48ch] text-[length:var(--step-body)] md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8">
+          Like for like: Playwright on Chromium against Cypress on Electron, headless, same
+          scenarios, same two public sites. It is one run over the internet, so network time is
+          most of what you see here. Read it as a ballpark, not a benchmark.
+        </p>
+      </div>
+      <div data-reveal className="grid gap-x-10 gap-y-12 md:grid-cols-12">
+        <div className="md:col-span-6">
+          <Specimen
+            value={seconds(likeForLike.pwMedianMs)}
+            caption="Playwright · Chromium · median per scenario"
+          />
+        </div>
+        <div className="md:col-span-6">
+          <Specimen
+            value={seconds(likeForLike.cyMedianMs)}
+            caption="Cypress · Electron · median per scenario"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -13,6 +13,10 @@ POC comparing **Playwright** and **Cypress** (TypeScript) on the same scenarios 
 | `npm run test:cy` | Cypress (Electron) |
 | `npm run test:all` | Both, then merges results into `reports/results.json` |
 | `npm run merge` | Merge Playwright + Cypress results only |
+| `npm run report:data` | Merge results into the report app (`report/src/data/results.json`) |
+| `npm run report:dev` | Run the report app locally (Vite) |
+| `npm run report:cypress-html` | Cypress HTML report from the mochawesome JSON |
+| `npm run report:build` + `report:site` | Build the report and assemble the Pages site in `site/` |
 | `npm run typecheck` | `tsc --noEmit` |
 
 Reports are written to `reports/` (git-ignored).
@@ -49,3 +53,32 @@ Remove-Item Env:ELECTRON_RUN_AS_NODE
 npm run test:pw:update
 npm run test:cy:update
 ```
+
+## The report (`report/`)
+
+Vite + React + TypeScript + Tailwind, animated with GSAP. It reads `report/src/data/results.json`, which
+`npm run report:data` generates from the test runs. The committed copy is a real local run, so the app builds
+without running any tests.
+
+```powershell
+npm run test:all        # run both tools and merge
+npm run report:data     # refresh the app's data and baseline screenshots
+npm run report:dev      # http://localhost:5173
+```
+
+`scripts/record-demo.ts` records the checkout clip shown in the report (`npx tsx scripts/record-demo.ts`).
+
+## CI and GitHub Pages
+
+`.github/workflows/ci.yml` runs on every push to `master`, on pull requests, and manually:
+
+1. **playwright** and **cypress** run in parallel, headless, and upload their reports.
+2. **report** merges the results, builds the React report, adds both native HTML reports under `/native/`, and
+   publishes the site. Every run also gets a results table on its summary page and a downloadable `site` artifact.
+3. **deploy** publishes to GitHub Pages (`master` only).
+
+One-time setup: **Settings > Pages > Build and deployment > Source: GitHub Actions**.
+
+Linux visual baselines are created by CI the first time it runs (and whenever you trigger the workflow manually
+with *Regenerate the Linux screenshot baselines* ticked), then committed back with `[skip ci]`. That needs
+**Settings > Actions > General > Workflow permissions > Read and write**.

@@ -16,7 +16,6 @@ test.describe('Visual', () => {
   test('[VIS-01] inventory page matches the baseline', async ({ page }) => {
     await login(page, USERS.standard);
     await expect(page.locator('.inventory_item')).toHaveCount(6);
-    await page.waitForLoadState('networkidle');
     await expect(page).toHaveScreenshot(`${VISUAL.snapshots['VIS-01']}.png`, shot);
   });
 
@@ -37,7 +36,6 @@ test.describe('Visual', () => {
     await page.locator('[data-test="continue"]').click();
     await page.locator('[data-test="finish"]').click();
     await expect(page.locator('[data-test="complete-header"]')).toBeVisible();
-    await page.waitForLoadState('networkidle');
     await expect(page).toHaveScreenshot(`${VISUAL.snapshots['VIS-03']}.png`, shot);
   });
 });
