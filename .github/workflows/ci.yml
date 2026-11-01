@@ -150,7 +150,10 @@ jobs:
 
   deploy:
     needs: report
-    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    # The report exists to show failing tests, so publish it whatever the tests did.
+    # Without an explicit status check, GitHub adds an implicit success() that also requires the
+    # test jobs upstream of `report` to have passed, and one failing test would block the deploy.
+    if: ${{ !cancelled() && needs.report.result == 'success' && github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     permissions:
       pages: write
