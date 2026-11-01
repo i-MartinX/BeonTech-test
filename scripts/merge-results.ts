@@ -310,8 +310,31 @@ if (process.env.GITHUB_STEP_SUMMARY) {
     row('Playwright', out.tools.playwright),
     row('Cypress', out.tools.cypress),
     '',
-    `${scenarios.length} scenarios, ${failed.length ? `failing: ${failed.map((s) => s.id).join(', ')}` : 'none failing'}.`,
+    `${scenarios.length} scenarios, ${failed.length ? `${failed.length} failing` : 'none failing'}.`,
     '',
+    ...(failed.length
+      ? [
+          '### Failures',
+          '',
+          '| Scenario | Tool | Error |',
+          '| --- | --- | --- |',
+          ...failed.flatMap((s) =>
+            (['playwright', 'cypress'] as const).flatMap((tool) => {
+              const r = s.results[tool];
+              if (r?.status !== 'failed') return [];
+              const browsers = r.browsers
+                ? Object.entries(r.browsers)
+                    .filter(([, run]) => run.status === 'failed')
+                    .map(([b]) => b)
+                : [];
+              const error = (r.error ?? 'no message').replace(/\|/g, '\\|').slice(0, 300);
+              const where = browsers.length ? ` (${browsers.join(', ')})` : '';
+              return [`| ${s.id} ${s.title} | ${tool}${where} | ${error} |`];
+            }),
+          ),
+          '',
+        ]
+      : []),
   ].join('\n');
   fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
 }
