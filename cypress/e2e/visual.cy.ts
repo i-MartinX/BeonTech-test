@@ -10,6 +10,7 @@ const login = (user: { username: string; password: string }) => {
 // Cypress does not wait for images on its own, so a baseline could be taken half-loaded.
 const imagesLoaded = () =>
   cy.get('img').should(($imgs) => {
+    expect($imgs.length, 'page has images').to.be.greaterThan(0);
     $imgs.each((_, img) => {
       expect((img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0).to.be
         .true;
