@@ -1,3 +1,4 @@
+import { CypressWordmark, PlaywrightLogo } from './Logos';
 import { results } from '../lib/data';
 
 const rows = [
@@ -29,7 +30,7 @@ const rows = [
 
 export function Reports() {
   return (
-    <section id="reports" className="field-blue section">
+    <section id="reports" className="field-navy section">
       <h2 data-reveal className="h2" style={{ maxWidth: '8ch' }}>
         Native reports
       </h2>
@@ -47,10 +48,14 @@ export function Reports() {
               <tr
                 key={r.tool}
                 className="max-md:block max-md:py-3"
-                style={i % 2 ? undefined : { background: '#1220a6' }}
+                style={i % 2 ? undefined : { background: 'var(--surface)' }}
               >
                 <th scope="row" className="py-[14px] pr-4 pl-4 font-semibold max-md:block max-md:py-0 md:w-[22%]">
-                  {r.tool}
+                  <span className="flex items-center gap-3">
+                    {r.tool === 'Playwright' && <PlaywrightLogo h={32} alt="" />}
+                    {r.tool === 'Cypress' && <CypressWordmark h={22} alt="" />}
+                    {r.tool === 'Cypress' ? <span className="sr-only">Cypress</span> : r.tool}
+                  </span>
                 </th>
                 <td className="py-[14px] pr-4 max-md:block max-md:py-1 max-md:pl-4">{r.inside}</td>
                 <td className="py-[14px] pr-4 text-right md:whitespace-nowrap max-md:block max-md:py-0 max-md:pl-4 max-md:text-left">

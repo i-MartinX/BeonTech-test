@@ -1,10 +1,11 @@
+import { CypressWordmark, PlaywrightLogo } from './Logos';
 import { inWords, likeForLike, scenarios, suiteLabel, suites } from '../lib/data';
 import type { Suite } from '../types';
 
 const look: Record<Suite, { bg: string; ink: string }> = {
-  API: { bg: '#f7dd47', ink: '#000' },
-  UI: { bg: '#000', ink: '#fff' },
-  VISUAL: { bg: '#e9479f', ink: '#000' },
+  API: { bg: '#3a69ff', ink: '#fff' },
+  UI: { bg: '#7432ff', ink: '#fff' },
+  VISUAL: { bg: '#39b96a', ink: '#20222d' },
 };
 
 const count = (s: Suite) => scenarios.filter((x) => x.suite === s).length;
@@ -14,12 +15,21 @@ const clause: Record<Suite, string> = {
   VISUAL: `${count('VISUAL')} screenshots compared with the stored baselines.`,
 };
 
-function Bar({ tool, label }: { tool: 'playwright' | 'cypress'; label: string }) {
+function Bar({
+  tool,
+  label,
+  logo,
+}: {
+  tool: 'playwright' | 'cypress';
+  label: string;
+  logo: React.ReactNode;
+}) {
   const parts = suites.map((s) => ({ suite: s, ms: likeForLike.suiteMs(tool, s) }));
   const total = parts.reduce((n, p) => n + p.ms, 0);
   return (
     <div data-reveal className="mb-20 last:mb-0">
-      <p className="mt-0 mb-4 text-[length:var(--step-lead)] font-semibold">
+      <p className="mt-0 mb-4 flex items-center gap-4 text-[length:var(--step-lead)] font-semibold">
+        {logo}
         {label} · {inWords(total)} in total
       </p>
       <div>
@@ -68,12 +78,16 @@ function Bar({ tool, label }: { tool: 'playwright' | 'cypress'; label: string })
 
 export function TimeBars() {
   return (
-    <section id="time" className="field-blue section">
+    <section id="time" className="field-navy section">
       <h2 data-reveal className="h2 mb-[clamp(48px,8vh,96px)]">
         Where the time went
       </h2>
-      <Bar tool="playwright" label="Playwright on Chromium" />
-      <Bar tool="cypress" label="Cypress on Electron" />
+      <Bar
+        tool="playwright"
+        label="Playwright on Chromium"
+        logo={<PlaywrightLogo h={48} alt="" />}
+      />
+      <Bar tool="cypress" label="Cypress on Electron" logo={<CypressWordmark h={30} alt="" />} />
     </section>
   );
 }
